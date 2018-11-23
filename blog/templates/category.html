@@ -1,0 +1,103 @@
+{% block content %}
+{% load static %}
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <title>首页-EasyDown</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="南农信息资源共享系统，NJAU">
+    <meta name="author" content="Ericam_">
+
+    <!-- CSS -->
+    <title>EasyDown-南农资源共享系统</title>
+    <link href="{%static 'css/font-awesome.min.css'%}" rel="stylesheet"/>
+    <link rel="shortcut icon" href="{% static 'css/images/gt_favicon.png' %}">
+    <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <!-- Custom styles for our template -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.css'%}" media="screen" >
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+</head>
+
+<body>
+  <script src = "E:/bootstrap/bootstrap-3.3.7-dist/bootstrap-3.3.7-dist/js/jquery.min.js"></script>
+  <!--导航栏-->
+    <div class="navbar navbar-inverse navbar-fixed-top headroom" >
+        <div class="container">
+            <div class="navbar-header">
+                <!-- Button for smallest screens -->
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a class="navbar-brand"><img src="{%static 'css/images/lo.png'%}" alt="Progressus HTML5 template"></a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav col-lg-6">
+                    <li><a href="{%url 'blog:home'%}">首页</a></li>
+                    <li><a href="{%url 'blog:tags'%}">标签</a></li>
+                    <li><a href="{%url 'blog:app'%}">软件</a></li>
+                    <li><a href="{%url 'blog:contact'%}">留言板</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+
+    <!-- container -->
+    <div class="container blog">
+        <div class="row">
+            <!-- Article main content -->
+            <article class="col-sm-8 maincontent">
+                <header class="page-header">
+                    <h1 class="page-title" color="">EasyDown-分类<img src="{%static 'css/images/dlam.png'%}" width="8%"></h1>
+                </header>
+                {% for post in post_list %}
+                    <p><font size="5px">{{ post.title }}</font> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-columns"></i><font color="grey"> 发表于{{ post.created_time |date:'Y/m/d'}}&nbsp;&nbsp;| 热度：{{ post.views }}</font></p>
+                {%endfor%}
+                 {% if post_list.object_list and post_list.paginator.num_pages > 1 %}
+                    <div>
+            {% if post_list.has_previous %}
+              <ul class="pager">
+                <li class="previous"><a href="?page={{ post_list.previous_page_number }}"><span aria-hidden="true">&larr;</span> Older</a></li>
+            </ul>
+            {% endif %}
+            {% if post_list.has_next %}
+              <ul class="pager">
+                <li class="next"><a  href="?page={{ post_list.next_page_number }}">Newer <span aria-hidden="true">&rarr;</span></a></li>
+              </ul>
+            {% endif %}
+                    </div>
+    {% endif %}
+            </article>
+            <!-- /Article -->
+
+            <!-- Sidebar -->
+            <aside class="col-sm-4 sidebar sidebar-right">
+
+                <div class="widget">
+                    <h4>食用须知</h4>
+                    <ul class="list-unstyled list-spaces">
+                        <li>课程信息资料主要来源于群组，感谢大家的无私贡献</li>
+                        <li>软件破解版仅用于帮助大家学习</li>
+                        <li>优秀资源与资料请用留言板告知，感谢您的帮助</li>
+                        <li>希望大家多多宣传本站~</li>
+                        <li>合作请戳-->私信<a href="https://www.zhihu.com/people/qing-ru-han/activities">知乎</a></li>
+                    </ul>
+                </div>
+            </aside>
+            <!-- /Sidebar -->
+
+        </div>
+    </div>  <!-- /container -->
+
+
+
+
+   <footer  class="top-space">
+        <div class="footer2">
+            <div class="container">
+                <p class="text-center">Copyright &copy; 2018, EasyDown - 南农资源共享系统</p>
+            </div>
+        </div>
+  </footer>
+</body>
+</html>
+{% endblock %}

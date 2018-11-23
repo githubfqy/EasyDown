@@ -1,0 +1,8 @@
+{% for post in post_list %}
+<a href = "./article/{{ post.pk }}">点我</a>
+  <article >
+   {{post.body}}
+  </article>
+{% empty %}
+  <div >暂时还没有发布的文章！</div>
+{% endfor %}

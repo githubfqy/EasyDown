@@ -1,0 +1,132 @@
+{% load static %}
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="南农信息资源共享系统，NJAU">
+    <meta name="author" content="Ericam_">
+
+    <!-- CSS -->
+    <title>{{post.title}}</title>
+    <link href="{%static 'css/font-awesome.min.css'%}" rel="stylesheet"/>
+    <link rel="shortcut icon" href="{% static 'css/images/gt_favicon.png' %}">
+    <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <!-- Custom styles for our template -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.css'%}" media="screen" >
+    <link rel="stylesheet" href="{% static 'css/blog_detail.css' %}">
+    <!--<script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <script src="{%static 'js/jquery.min.js'%}"></script>
+    <script src="{%static 'js/bootstrap.min.js'%}"></script>
+</head>
+
+<body>
+  <!--导航栏-->
+    <div class="navbar navbar-inverse navbar-fixed-top headroom" >
+        <div class="container">
+            <div class="navbar-header">
+                <!-- Button for smallest screens -->
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a class="navbar-brand"><img src="{%static 'css/images/lo.png'%}" alt="Progressus HTML5 template"></a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="{%url 'blog:home'%}">首页</a></li>
+                    <li><a href="{%url 'blog:tags'%}">标签</a></li>
+                    <li><a href="contact.html">软件</a></li>
+                    <li><a href="contact.html">留言板</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div>
+           <section class="blog">
+            <header>
+                <h2 class="text-center"><font size=50px>{{ post.title }}</font></h2>
+
+                    <p class="text-center blog-time">
+                        <i class="fa fa-columns"></i> 发布时间: {{ post.pub_time|date:'Y/m/d H:m:s'}}&nbsp&nbsp
+                        | <i class="fa fa-folder"></i> 分类于 <a href="#">{{ post.category }}</a>&nbsp&nbsp
+                        | <i class="fa fa-tags"></i> 标签:
+                          {% for tag in tags %}
+                            <a href="#">{{ tag }}</a>
+                          {% endfor %}&nbsp;&nbsp;
+                        | <i class="fa fa-edit"></i> 作者:
+                        | 热度：{{ post.views }}
+                    </p>
+            </header>
+
+                <div class="post-description" style="padding: 20px 350px 20px 350px;font-size: 20px;" >
+                    <p>
+                        {{ post.content|safe}}<!--safe标签展现给用户实际内容-->
+                    </p>
+                </div>
+        </section>
+
+    <!-- 上下篇文章切换 开始-->
+    <div class="jumbotron" style="min-height: 100px">
+        {% if previouspost %}
+            <a class="btn" href="{% url 'blog:detail' id=previouspost.article_id %}" style="text-decoration: none; float: left;font-size: 20px;">
+                <i class="fa fa-angle-left"></i>&nbsp;&nbsp;上一篇：{{ previouspost.title }}
+            </a>
+        {% endif %}
+        {% if nextpost %}
+            <a class="btn" href="{% url 'blog:detail' id=nextpost.article_id %}" style="text-decoration: none; float: right;font-size: 20px;">
+                下一篇：{{ nextpost.title }}&nbsp;&nbsp;
+                <i class="fa fa-angle-right"></i>
+            </a>
+        {% endif %}
+
+    <!-- 上下篇文章切换 结束-->
+            <article style="padding:100px 100px 100px 50px">
+                <h2 style="font-family: KaiTi;">评论列表</h2>
+        {% for comm in comment_list %}
+            <div style="background-color: #d0d0d0;">
+                <p style="width: 1000px;font-size: 20px">{{comm.body}}</p>
+                <p class="text-right" style="width: 1050px"><font color="#2894FF" size="4px">{{comm.nickname}}</font>  <font color="#6C6C6C" size="4px">&nbsp;&nbsp;&nbsp;&nbsp;{{comm.createtime}}</font></p>
+            </div>
+        {% endfor %}
+        {% if comment_list.object_list and comment_list.paginator.num_pages > 1 %}
+                    <div>
+            {% if comment_list.has_previous %}
+              <ul class="pager">
+                <li class="previous"><a href="?page={{ comment_list.previous_page_number }}"><span aria-hidden="true">&larr;</span> Older</a></li>
+            </ul>
+            {% endif %}
+            {% if comment_list.has_next %}
+              <ul class="pager">
+                <li class="next"><a  href="?page={{ comment_list.next_page_number }}">Newer <span aria-hidden="true">&rarr;</span></a></li>
+              </ul>
+            {% endif %}
+                    </div>
+                </article>
+    {% endif %}
+    <div class="row">
+        <div class="col-sm-6">
+            <div style="padding-top: 100px">
+                <h2 style="font-family: KaiTi;">新的评论</h2>
+                <form id="" method="post" enctype="multipart/form-data">
+                <div style="width: 50px;">
+                    {% csrf_token %}
+                    {{comment.as_p}}
+                </div>
+                <button  type="submit" id="submit"><a class="btn btn-default" style="width: 300px;">提交</a></button>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <img src="{%static 'css/images/peiqi.png'%}" width="50%">
+        </div>
+      </div>
+     </div>
+    </div>
+   <footer class="top-space" style="background: #191919; padding: 15px 0; color: #777; font-size: 12px;">
+            <div class="container">
+                <p class="text-center">Copyright &copy; 2018, EasyDown - 南农资源共享系统</p>
+            </div>
+  </footer>
+</body>
+</html>
